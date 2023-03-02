@@ -1,6 +1,6 @@
 # Artwork-Tracing-Management-via-Blockchain-Technology
 
-Members: Haki Sallaku, Gary LaPicola, Thomas [Last Name], Mathew [Last Name]
+Members: Haki Sallaku, Gary LaPicola, Thomas Scardino, Mathew [Last Name]
 
 Description: This project is an application of blockchain technology on the art industry. The idea behind it is to create a blockchain
              in order to keep track of and manage artworks, mainly painting, around the world. The history of the artworks is
