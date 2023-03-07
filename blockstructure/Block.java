@@ -76,7 +76,7 @@ public class Block {
         this.time = time;
     }
     
-    //'time' String getter
+    //'time' String getter 
     public String getTime() {
         return this.time;
     }
