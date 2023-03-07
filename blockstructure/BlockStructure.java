@@ -11,7 +11,7 @@ public class BlockStructure {
 
     public static byte[] getSHA(String input) throws NoSuchAlgorithmException {
         //Calls built-in Java method for generating SHA-256 algorithm.
-        //Can replace "SHA-256" with other hash algos such as SHA-512 to generate different hashes
+        //Can replace "SHA-256" with other hash algos such as SHA-512 to generate different hashes.
         MessageDigest md = MessageDigest.getInstance("SHA-256");
         
         //Calls built-in Java digest method to return an array of bytes to be used in toHexString method
