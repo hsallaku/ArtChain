@@ -1,0 +1,32 @@
+{"":"Block #0, previous Hash: null, timestamp: Mon Mar 20 20:04:18 EDT 2023, data: Genesis Block, Hash: 0000f3e448bd56a5ece20414409e0783854ab91004ae871275521bbdcf6f4a3d]"}
+
+
+
+{"":"Block #1, previous Hash: 0000f3e448bd56a5ece20414409e0783854ab91004ae871275521bbdcf6f4a3d, timestamp: Mon Mar 20 20:04:18 EDT 2023, data: lets pass a string of data, Hash: 0000804822e338805c8e2c6df43bed28f311950605ccc8c241383fc62b93e885]"}
+
+
+
+{"":"Block #2, previous Hash: 0000804822e338805c8e2c6df43bed28f311950605ccc8c241383fc62b93e885, timestamp: Mon Mar 20 20:04:19 EDT 2023, data: lets try numbers! 1 2 buckle my shoe, 3 4 shut the door, Hash: 00006616be73bfc5f9831d889d65e84c81014786768a2598d5a6caeb984ddace]"}
+
+
+
+{"":"Block #3, previous Hash: 00006616be73bfc5f9831d889d65e84c81014786768a2598d5a6caeb984ddace, timestamp: Mon Mar 20 20:04:19 EDT 2023, data: now symbols!@#$%^&*(), Hash: 00004a21f87e245d907c31606c712d53c3f8610acc8767284169ccea853168f4]"}
+
+
+
+{"":"Block #0, previous Hash: null, timestamp: Mon Mar 20 20:04:32 EDT 2023, data: Genesis Block, Hash: 000076e3122c893cf709faa639507956138984ddd850eb40f923e6f498011bb4]"}
+
+
+
+{"":"Block #1, previous Hash: 000076e3122c893cf709faa639507956138984ddd850eb40f923e6f498011bb4, timestamp: Mon Mar 20 20:04:32 EDT 2023, data: lets pass a string of data, Hash: 0000c9a6066734d97234c503933fabef70f2cddfc10a13a4fe48ab163ece4ecc]"}
+
+
+
+{"":"Block #2, previous Hash: 0000c9a6066734d97234c503933fabef70f2cddfc10a13a4fe48ab163ece4ecc, timestamp: Mon Mar 20 20:04:32 EDT 2023, data: lets try numbers! 1 2 buckle my shoe, 3 4 shut the door, Hash: 00008f448ed764aa6373fd5040040a4a6d71f65cc8cc0bb2010d3a414cfe6e61]"}
+
+
+
+{"":"Block #3, previous Hash: 00008f448ed764aa6373fd5040040a4a6d71f65cc8cc0bb2010d3a414cfe6e61, timestamp: Mon Mar 20 20:04:32 EDT 2023, data: now symbols!@#$%^&*(), Hash: 00003fc781d7f325664ad0fb80e3f923f1e38e37a60a49d2f044c8b2dc778bc0]"}
+
+
+
