@@ -20,12 +20,6 @@ ArtChain is an innovative blockchain-based platform designed to secure and authe
 
 ArtChain is poised to revolutionize the art world by providing a secure, transparent, and reliable platform for managing artwork ownership and provenance. By harnessing the power of blockchain technology, ArtChain aims to redefine trust and authentication in the art market, enabling a safer and more vibrant ecosystem for artists, collectors, and enthusiasts worldwide. Experience the future of art ownership with ArtChain.
 
-**Contents**:
-
--**ArtChain**                                                                                                                                                   **core**: Artwork.java / Block.java / Blockchain.java / Transaction.java                                                                                               **main**: Main.java                                                                                                                                                     **network**: BlockchainIO.java / P2PNode.java                                                                                                                 **utils**: StringUtil.java
-
-**Additional Files**: blockchain.json
-
 These are the functionalities of each of the classes held in the source code of the project.
 
 **Artwork**: This class represents an artwork and holds information such as the title, artist, creation year, and location. It has a constructor for initializing these properties and getter methods to access them.
