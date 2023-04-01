@@ -22,11 +22,7 @@ ArtChain is poised to revolutionize the art world by providing a secure, transpa
 
 **Contents**:
 
--**ArtChain**
-**core**: Artwork.java / Block.java / Blockchain.java / Transaction.java
-**main**: Main.java
-**network**: BlockchainIO.java / P2PNode.java
-**utils**: StringUtil.java
+-**ArtChain**                                                                                                                                                   **core**: Artwork.java / Block.java / Blockchain.java / Transaction.java                                                                                               **main**: Main.java                                                                                                                                                     **network**: BlockchainIO.java / P2PNode.java                                                                                                                 **utils**: StringUtil.java
 
 **Additional Files**: blockchain.json
 
