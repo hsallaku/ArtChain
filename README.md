@@ -33,7 +33,7 @@ Contents:
        -network
              -BlockchainIO.java
              -P2PNode.java
-       -utils
+       -utils 
              -StringUtil.java
 
 These are the functionalities of each of the classes held in the source code of the project.
