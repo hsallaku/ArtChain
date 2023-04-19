@@ -74,6 +74,8 @@ public class Network {
     }
     
     public Node getNodeByUsername(String username) {
+        //Iterates over the nodes hashmap and compares the specified username with the values within each node
+        //If the username is found, the node is returned.
         for(Map.Entry<Integer, Node> entry : nodes.entrySet()) {
             Node node = entry.getValue();
             if(node.getUsername().equals(username)) {
