@@ -102,33 +102,31 @@ public class Main {
     public static void menuSignUp(Scanner input, Network network, Blockchain blockchain) {
         boolean uniqueUsername = false;
         boolean confirmedPassword = false;
-
-        System.out.print("Enter username: ");
-        String username = input.nextLine();
+        Node user = null;
 
         while (!uniqueUsername) {
-            if (network.nodes.containsValue(username)) {
+            System.out.print("Enter username: ");
+            String username = input.nextLine();
+            user = network.getNodeByUsername(username);
+            
+            if (user != null) {
                 System.out.println("Username already exists.");
-                continue;
             } else {
                 uniqueUsername = true;
-            }
-        }
-
-        System.out.print("Enter password: ");
-        String password = input.nextLine();
-
-        while (!confirmedPassword) {
-            System.out.print("Confirm password: ");
-            String confirmPassword = input.next();
-
-            if (confirmPassword.equals(password)) {
-                network.addNode(username, password, network, blockchain);
-                System.out.println("Congratulations, your ArtChain account has been created!");
-                confirmedPassword = true;
-            } else {
-                System.out.println("Passwords do not match.");
-                continue;
+                System.out.print("Enter password: ");
+                String password = input.nextLine();
+                while(!confirmedPassword) {
+                    System.out.print("Confirm password: ");
+                    String confirmPassword = input.nextLine();
+                    if(confirmPassword.equals(password)) {
+                        network.addNode(username, password, network, blockchain);
+                        System.out.println("Congratulations, your ArtChain account has been created!");
+                        confirmedPassword = true;
+                    }
+                    else {
+                        System.out.println("Passwords do not match.");
+                    }
+                }
             }
         }
     }
