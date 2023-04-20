@@ -8,6 +8,7 @@ ArtChain is an innovative blockchain-based platform designed to secure and authe
 
 Useful links: 
 http://www.java2s.com/ref/java/java.html (JavaFX tutorials)
+
 https://sites.google.com/site/gson/gson-user-guide (Gson documentation)
 
 Project Requirements:
