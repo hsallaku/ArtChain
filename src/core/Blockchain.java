@@ -1,8 +1,9 @@
 package core;
 
 import java.util.*;
+import network.*;
 
-public class Blockchain {
+public class Blockchain{
     private List<Block> chain;
     private List<Transaction> pendingTransactions;
     private List<Transaction> blockTransactions = new ArrayList<Transaction>();
@@ -21,8 +22,9 @@ public class Blockchain {
         return genBlock;
     }
 
-    public void addBlock(Block newBlock) {
+    public void addBlock(Block newBlock, int nodeId) {
         chain.add(newBlock);
+        BlockchainIO.saveBlockchain("blockchain" + nodeId + ".json", this);
     }
     
     public int getLength() {
@@ -51,7 +53,7 @@ public class Blockchain {
         pendingTransactions.add(transaction);
     }
 
-    public void acceptPendingTransaction(Transaction transaction, int index) {
+    public void acceptPendingTransaction(Transaction transaction, int index, int nodeId) {
         // If the blockTransactions list doesn't exist or is full, create a new list
         if (blockTransactions == null || blockTransactions.size() >= 2) {
             blockTransactions = new ArrayList<>();
@@ -64,7 +66,7 @@ public class Blockchain {
         //and empty the queue
         if (blockTransactions.size() >= 2) {
             Block newBlock = new Block(getLatestBlock().getHash(), blockTransactions);
-            chain.add(newBlock);
+            addBlock(newBlock, nodeId);
             blockTransactions = null; // Set to null to create a new list for the next block
             System.out.println("added new block");
         }

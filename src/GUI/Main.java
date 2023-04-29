@@ -88,8 +88,7 @@ public class Main extends Application {
             if (!userExists) {
                 currentUser = new BNode(username, password);
                 window.setScene(createStandardNodeScene());
-                
-                System.out.println("User information saved.");
+                System.out.println("Node " + currentUser.getUsername() + " has registered");
             } else {
                 showAlert(Alert.AlertType.ERROR, "Error", "Username already exists. Please choose a different username.");
             }
@@ -138,7 +137,8 @@ public class Main extends Application {
 
             if (loggedInUser != null) {
                 currentUser = loggedInUser;
-                System.out.println("Node " + currentUser.getUsername() + " has logged in.");
+                System.out.println("Node " + currentUser.getUsername() + " has logged in");
+                currentUser.setBlockchain(BlockchainIO.loadBlockchain("blockchain" + currentUser.getId() + ".json"));
                 if (loggedInUser.getStatus().equals("s")) {
                     window.setScene(createStandardNodeScene());
                 } else if (loggedInUser.getStatus().equals("v")) {
@@ -343,6 +343,7 @@ public class Main extends Application {
 
     
     public VBox createVBPage(int pageIndex) {
+        currentUser.setBlockchain(BlockchainIO.loadBlockchain("blockchain" + currentUser.getId() + ".json"));
         Block block = currentUser.getBlockchain().getChain().get(pageIndex);
         Label blockNumberLabel = new Label("Block # " + pageIndex);
         Label hashLabel = new Label("Hash: " + block.getHash());
@@ -542,7 +543,7 @@ public class Main extends Application {
         Button rejectBtn = new Button("Reject");
 
         acceptBtn.setOnAction(e -> {
-            currentUser.getBlockchain().acceptPendingTransaction(transaction, pageIndex);
+            currentUser.getBlockchain().acceptPendingTransaction(transaction, pageIndex, currentUser.getId());
             updatePTPagination();
             if (currentUser.getBlockchain().getPendingTransactions().isEmpty()) {
                 showAlert(Alert.AlertType.INFORMATION, "No remaining pending transactions", "There are no remaining pending transactions.");

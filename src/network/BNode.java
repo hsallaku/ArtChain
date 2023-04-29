@@ -25,7 +25,7 @@ public class BNode {
     private String status;
     @Expose
     private String filePath;
-    private Blockchain blockchain = new Blockchain();
+    private Blockchain blockchain;
     
     public BNode(){
         id = 0;
@@ -33,12 +33,14 @@ public class BNode {
         password = "";
         status = "";
         filePath = "";
+        blockchain = new Blockchain();
     }
     
     public BNode(String username, String password) {
         this.username = username;
         this.password = StringUtil.applySha256(password);
         this.status = "s"; // stands for standard node, validators will have the letter v
+        blockchain = new Blockchain();
 
         // Check if the nodes.json file exists, and if not, create an empty one
         File usersFile = new File("users.json");
@@ -127,5 +129,10 @@ public class BNode {
 
     public Blockchain getBlockchain() {
         return blockchain;
+    }
+    
+    public void setBlockchain(Blockchain blockchain){
+    
+        this.blockchain = blockchain;
     }
 }
