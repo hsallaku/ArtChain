@@ -13,6 +13,13 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.File;
+import java.io.UnsupportedEncodingException;
+import java.security.*;
+import java.security.interfaces.ECPrivateKey;
+import java.security.spec.InvalidKeySpecException;
+import java.security.spec.PKCS8EncodedKeySpec;
+import java.security.spec.X509EncodedKeySpec;
+import java.util.Base64;
 
 public class BNode {
     @Expose
@@ -25,23 +32,39 @@ public class BNode {
     private String status;
     @Expose
     private String filePath;
+    @Expose
+    private String privateKeyString;
+    @Expose
+    private String publicKeyString;
+    private transient PrivateKey privateKey;
+    private transient PublicKey publicKey;
     private Blockchain blockchain;
     
-    public BNode(){
+    public BNode() {
         id = 0;
         username = "";
         password = "";
         status = "";
         filePath = "";
+        privateKeyString = "";
+        publicKeyString = "";
         blockchain = new Blockchain();
     }
     
-    public BNode(String username, String password) {
+    public BNode(String username, String password) throws NoSuchAlgorithmException, InvalidKeySpecException {
         this.username = username;
         this.password = StringUtil.applySha256(password);
         this.status = "s"; // stands for standard node, validators will have the letter v
         blockchain = new Blockchain();
-
+        //generate the keyPair for new nodes
+        KeyPairGenerator keyPairGenerator = KeyPairGenerator.getInstance("EC");
+        SecureRandom random = SecureRandom.getInstanceStrong();
+        keyPairGenerator.initialize(256, random);
+        KeyPair keyPair = keyPairGenerator.generateKeyPair();
+        this.publicKey = keyPair.getPublic();
+        this.privateKey = (ECPrivateKey) keyPair.getPrivate();
+        privateKeyString = Base64.getEncoder().encodeToString(privateKey.getEncoded());
+        publicKeyString = Base64.getEncoder().encodeToString(publicKey.getEncoded());
         // Check if the nodes.json file exists, and if not, create an empty one
         File usersFile = new File("users.json");
         if (!usersFile.exists()) {
@@ -83,7 +106,6 @@ public class BNode {
         } catch (IOException e) {
             e.printStackTrace();
         }
-
         System.out.printf("Node %d connected to network\n", id);
     }
 
@@ -130,9 +152,34 @@ public class BNode {
     public Blockchain getBlockchain() {
         return blockchain;
     }
-    
-    public void setBlockchain(Blockchain blockchain){
+        public void setBlockchain(Blockchain blockchain){
     
         this.blockchain = blockchain;
     }
+    public PrivateKey getPrivateKey() {
+        return this.privateKey;
+    }
+    public PublicKey getPublicKey() {
+        return this.publicKey;
+    } 
+    public String getPublicKeyString()
+    {
+        return publicKeyString;
+    }
+    public void restoreKeysFromLoad() throws NoSuchAlgorithmException, InvalidKeySpecException
+    {
+        byte[] privateBytes = Base64.getDecoder().decode(privateKeyString);
+        byte[] publicBytes = Base64.getDecoder().decode(publicKeyString);
+        privateKey = KeyFactory.getInstance("EC").generatePrivate(new PKCS8EncodedKeySpec(privateBytes));
+        publicKey = KeyFactory.getInstance("EC").generatePublic(new X509EncodedKeySpec(publicBytes));
+    }
+    public byte[] signBlock() throws NoSuchAlgorithmException, InvalidKeyException, SignatureException, UnsupportedEncodingException
+    {
+        Signature signature = Signature.getInstance("SHA256withECDSA");
+        signature.initSign(getPrivateKey());
+        signature.update(username.getBytes("UTF-8"));
+        return signature.sign();
+    }
+    
 }
+
