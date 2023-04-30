@@ -89,6 +89,10 @@ public class Blockchain {
         return chain;
     }
     
+    public void setPendingTransactions(List<Transaction> pendingTransactions) {
+        this.pendingTransactions = pendingTransactions;
+    }
+    
     public List<Transaction> getPendingTransactions(){
         return pendingTransactions;
     }
