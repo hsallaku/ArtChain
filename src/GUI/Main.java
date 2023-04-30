@@ -1,10 +1,9 @@
+//////////////////////////////////////////////////////////////////	
+// Haki Sallaku, Gary LaPicola, Thomas Scardino, Matthew Creese //	
+// Dr. AbuMallouh                                               //	
+// CMPT 368 Blockchain & Cryptocurrency Technologies            //	
+// Final Project                                                //	
 //////////////////////////////////////////////////////////////////
-// Haki Sallaku, Gary LaPicola, Thomas Scardino, Matthew Creese //
-// Dr. AbuMallouh                                               //
-// CMPT 368 Blockchain & Cryptocurrency Technologies            //
-// Final Project                                                //
-//////////////////////////////////////////////////////////////////
-
 package GUI;
 
 import javafx.application.Application;
@@ -572,7 +571,7 @@ public class Main extends Application {
 
         acceptBtn.setOnAction((ActionEvent e) -> {
             try {
-                currentUser.getBlockchain().acceptPendingTransaction(transaction, pageIndex, currentUser.signBlock(), currentUser.getPublicKeyString(), currentUser.getId());
+                currentUser.getBlockchain().acceptPendingTransaction(transaction, pageIndex, currentUser.signBlock(), currentUser.getPublicString(), currentUser.getId());
             } catch (NoSuchAlgorithmException ex) {
                 Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
             } catch (InvalidKeyException ex) {
