@@ -159,17 +159,21 @@ public class BNode {
     public PrivateKey getPrivateKey() {
         return this.privateKey;
     }
+    public String getPrivateString()
+    {
+        return privateKeyString;
+    }
     public PublicKey getPublicKey() {
         return this.publicKey;
     } 
-    public String getPublicKeyString()
+    public String getPublicString()
     {
         return publicKeyString;
     }
     public void restoreKeysFromLoad() throws NoSuchAlgorithmException, InvalidKeySpecException
     {
-        byte[] privateBytes = Base64.getDecoder().decode(privateKeyString);
-        byte[] publicBytes = Base64.getDecoder().decode(publicKeyString);
+        byte[] privateBytes = Base64.getDecoder().decode(getPrivateString());
+        byte[] publicBytes = Base64.getDecoder().decode(getPublicString());
         privateKey = KeyFactory.getInstance("EC").generatePrivate(new PKCS8EncodedKeySpec(privateBytes));
         publicKey = KeyFactory.getInstance("EC").generatePublic(new X509EncodedKeySpec(publicBytes));
     }
