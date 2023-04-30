@@ -1,14 +1,12 @@
 package core;
 
-/**
- *
- * @author Haki
- */
 public class Transaction {
+
     private Artwork artwork;
     private String sender;
     private String receiver;
     private String amount;
+
     // Constructor
     public Transaction(Artwork artwork, String sender, String receiver, String amount) {
         this.artwork = artwork;
@@ -52,11 +50,11 @@ public class Transaction {
 
     @Override
     public String toString() {
-        return "Transaction{" +
-                "artwork=" + artwork +
-                ", sender='" + sender + '\'' +
-                ", receiver='" + receiver + '\'' +
-                ", amount='" + amount + '\'' +
-                '}';
+        return "Transaction{"
+                + "artwork=" + artwork
+                + ", sender='" + sender + '\''
+                + ", receiver='" + receiver + '\''
+                + ", amount='" + amount + '\''
+                + '}';
     }
 }
