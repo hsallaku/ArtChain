@@ -37,6 +37,7 @@ public class Main extends Application {
     private Scene mainMenuScene, newNodeScene, existingNodeScene, transactionSubmissionScene;
     private Pagination pagination;
     private static BNode currentUser = new BNode();
+    private static BNode nextUser = new BNode();
     
     public static void main(String[] args) {
         // Start the synchronization simulator in a separate thread
@@ -115,7 +116,7 @@ public class Main extends Application {
             }
         
         });
-
+        
         Button backBtn = new Button("Back");
         backBtn.setOnAction(e -> window.setScene(mainMenuScene));
 
@@ -572,6 +573,9 @@ public class Main extends Application {
         acceptBtn.setOnAction((ActionEvent e) -> {
             try {
                 currentUser.getBlockchain().acceptPendingTransaction(transaction, pageIndex, currentUser.signBlock(), currentUser.getPublicString(), currentUser.getId());
+                /*for (int i = 0; i < getTotalNumberOfNodes(); i++) {
+                    nextUser = 
+                }*/
             } catch (NoSuchAlgorithmException ex) {
                 Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
             } catch (InvalidKeyException ex) {
@@ -630,5 +634,26 @@ public class Main extends Application {
         } else if (currentUser.getStatus().equals("v")) {
             window.setScene(createValidatorNodeScene());
         }
+    }
+    
+        public int getTotalNumberOfNodes() {
+        File usersFile = new File("users.json");
+        Gson gson = new Gson();
+        List<BNode> users;
+
+        if (usersFile.exists()) {
+            try ( FileReader reader = new FileReader(usersFile)) {
+                Type userListType = new TypeToken<ArrayList<BNode>>() {
+                }.getType();
+                users = gson.fromJson(reader, userListType);
+            } catch (IOException e) {
+                e.printStackTrace();
+                users = new ArrayList<>();
+            }
+        } else {
+            users = new ArrayList<>();
+        }
+
+        return users.size();
     }
 }
