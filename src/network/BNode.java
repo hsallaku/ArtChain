@@ -22,6 +22,7 @@ import java.security.spec.X509EncodedKeySpec;
 import java.util.Base64;
 
 public class BNode {
+
     @Expose
     private int id;
     @Expose
@@ -39,7 +40,7 @@ public class BNode {
     private transient PrivateKey privateKey;
     private transient PublicKey publicKey;
     private Blockchain blockchain;
-    
+
     public BNode() {
         id = 0;
         username = "";
@@ -50,7 +51,7 @@ public class BNode {
         publicKeyString = "";
         blockchain = new Blockchain();
     }
-    
+
     public BNode(String username, String password) throws NoSuchAlgorithmException, InvalidKeySpecException {
         this.username = username;
         this.password = StringUtil.applySha256(password);
@@ -68,7 +69,7 @@ public class BNode {
         // Check if the nodes.json file exists, and if not, create an empty one
         File usersFile = new File("users.json");
         if (!usersFile.exists()) {
-            try (FileWriter writer = new FileWriter(usersFile)) {
+            try ( FileWriter writer = new FileWriter(usersFile)) {
                 writer.write("[]");
             } catch (IOException e) {
                 e.printStackTrace();
@@ -78,8 +79,9 @@ public class BNode {
         // Read the list of nodes from the JSON file
         Gson gson = new GsonBuilder().excludeFieldsWithoutExposeAnnotation().setPrettyPrinting().create();
         List<BNode> userList;
-        try (FileReader reader = new FileReader(usersFile)) {
-            userList = gson.fromJson(reader, new TypeToken<List<BNode>>(){}.getType());
+        try ( FileReader reader = new FileReader(usersFile)) {
+            userList = gson.fromJson(reader, new TypeToken<List<BNode>>() {
+            }.getType());
             if (userList == null) {
                 userList = new ArrayList<>();
             }
@@ -98,10 +100,10 @@ public class BNode {
 
         // Add the new node to the list
         BNode currentUser = this;
-            userList.add(currentUser);
+        userList.add(currentUser);
 
         // Save the updated list of nodes to the JSON file
-        try (BufferedWriter writer = new BufferedWriter(new FileWriter(usersFile))) {
+        try ( BufferedWriter writer = new BufferedWriter(new FileWriter(usersFile))) {
             gson.toJson(userList, writer);
         } catch (IOException e) {
             e.printStackTrace();
@@ -112,11 +114,11 @@ public class BNode {
     public void setId(int id) {
         this.id = id;
     }
-    
+
     public void setUsername(String username) {
         this.username = username;
     }
-    
+
     public void setPassword(String password) {
         this.password = StringUtil.applySha256(password);
     }
@@ -124,19 +126,19 @@ public class BNode {
     public void setStatus(String status) {
         this.status = status;
     }
-    
+
     public void setFilePath(String filePath) {
         this.filePath = filePath;
     }
-    
+
     public int getId() {
         return this.id;
     }
-    
+
     public String getUsername() {
         return this.username;
     }
-    
+
     public String getPassword() {
         return this.password;
     }
@@ -144,7 +146,7 @@ public class BNode {
     public String getStatus() {
         return status;
     }
-    
+
     public String getFilePath() {
         return this.filePath;
     }
@@ -152,38 +154,45 @@ public class BNode {
     public Blockchain getBlockchain() {
         return blockchain;
     }
-        public void setBlockchain(Blockchain blockchain){
-    
+
+    public void setBlockchain(Blockchain blockchain) {
+
         this.blockchain = blockchain;
     }
+
     public PrivateKey getPrivateKey() {
         return this.privateKey;
     }
-    public String getPrivateString()
-    {
+
+    public String getPrivateString() {
         return privateKeyString;
     }
+
     public PublicKey getPublicKey() {
         return this.publicKey;
-    } 
-    public String getPublicString()
-    {
+    }
+
+    public String getPublicString() {
         return publicKeyString;
     }
-    public void restoreKeysFromLoad() throws NoSuchAlgorithmException, InvalidKeySpecException
-    {
+
+    public void restoreKeysFromLoad() throws NoSuchAlgorithmException, InvalidKeySpecException {
         byte[] privateBytes = Base64.getDecoder().decode(getPrivateString());
         byte[] publicBytes = Base64.getDecoder().decode(getPublicString());
         privateKey = KeyFactory.getInstance("EC").generatePrivate(new PKCS8EncodedKeySpec(privateBytes));
         publicKey = KeyFactory.getInstance("EC").generatePublic(new X509EncodedKeySpec(publicBytes));
     }
-    public byte[] signBlock() throws NoSuchAlgorithmException, InvalidKeyException, SignatureException, UnsupportedEncodingException
-    {
+
+    public byte[] signBlock() throws NoSuchAlgorithmException, InvalidKeyException, SignatureException, UnsupportedEncodingException {
         Signature signature = Signature.getInstance("SHA256withECDSA");
         signature.initSign(getPrivateKey());
-        signature.update(username.getBytes("UTF-8"));
         return signature.sign();
     }
-    
-}
 
+    public boolean verifyBlock(PublicKey publicKey, byte[] signature) throws NoSuchAlgorithmException, InvalidKeyException, SignatureException {
+        Signature verify = Signature.getInstance("SHA256withECDSA");
+        verify.initVerify(publicKey);
+        return verify.verify(signature);
+    }
+
+}
