@@ -42,3 +42,15 @@ JavaFX should now be set up for your project.
 ### Compiling
 
 In NetBeans, choose the "Clean and Build Project" option in the Run tab. Make sure both Gson and JavaFX are set up and integrated into your project.
+
+## Testing
+
+Validator node login information:
+Username: LouvreMuseum
+Password: 123
+
+Standard node login information:
+Username: arafat
+Password: 123
+
+If you would like to create a new validator node, register as a standard node and close the program. Open the users.json file in the program directory, and change the desired user's status from "s" to "v".
