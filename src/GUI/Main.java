@@ -1,3 +1,10 @@
+//////////////////////////////////////////////////////////////////
+// Haki Sallaku, Gary LaPicola, Thomas Scardino, Matthew Creese //
+// Dr. AbuMallouh                                               //
+// CMPT 368 Blockchain & Cryptocurrency Technologies            //
+// Final Project                                                //
+//////////////////////////////////////////////////////////////////
+
 package GUI;
 
 import javafx.application.Application;
