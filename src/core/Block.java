@@ -22,6 +22,7 @@ public class Block {
     private String publicString;
     private String signatureString;
     private transient byte[] signature;
+    private transient byte[] publicKey;
     private List<Transaction> transactions;
 
     public Block(String previousHash, List<Transaction> transactions, byte[] signature, String publicString) {
@@ -30,7 +31,6 @@ public class Block {
         this.transactions = transactions;
         this.hash = calculateHash();
         this.signature = signature;
-        System.out.println(Arrays.toString(getSignature()));
         this.publicString = publicString;
     }
 
@@ -81,21 +81,27 @@ public class Block {
     {
         return signature;
     }
+    /*public void setPublicString()
+    {
+        publicString = Base64.getEncoder().encodeToString(publicKey);
+    }*/
     public String getPublicString()
     {
         return publicString;
     }
-    public boolean verifySignature() throws InvalidKeyException, NoSuchAlgorithmException, SignatureException, InvalidKeySpecException
-    {
-    byte[] publicBytes = Base64.getDecoder().decode(getPublicString());
-    byte[] decodedSignature = Base64.getDecoder().decode(getSignatureString());
-    PublicKey publicKey = KeyFactory.getInstance("EC").generatePublic(new X509EncodedKeySpec(publicBytes));
-    Signature verify = Signature.getInstance("SHA256withECDSA");
-    verify.initVerify(publicKey);
-    return verify.verify(decodedSignature);
-    
+    public boolean verifySignature() throws InvalidKeyException, NoSuchAlgorithmException, SignatureException, InvalidKeySpecException {
+        byte[] publicBytes = Base64.getDecoder().decode(getPublicString());
+        byte[] decodedSignature = Base64.getDecoder().decode(getSignatureString());
+        PublicKey publicKey = KeyFactory.getInstance("EC").generatePublic(new X509EncodedKeySpec(publicBytes));
+        System.out.println("public key: " + publicKey);
+        System.out.println("public key str: " + getPublicString());
+        System.out.println("public key bytes: " + Arrays.toString(publicBytes));
+        System.out.println("signature: " + Arrays.toString(decodedSignature));
+        Signature verify = Signature.getInstance("SHA256withECDSA");
+        verify.initVerify(publicKey);
+        return verify.verify(decodedSignature);
     }
-
+    
     @Override
     public String toString() {
         return "Block{" +
