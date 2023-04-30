@@ -87,7 +87,7 @@ public class SynchronizationSimulator implements Runnable {
                 verifyNode(node2);
             }
         }
-        if (size1 != size2) {	
+        /*if (size1 != size2) {	
             if (size1 > size2) {	
                 blockchain2.setPendingTransactions(blockchain1.getPendingTransactions());	
                 BlockchainIO.saveBlockchain(String.format("blockchain%d.json", nodeId2), blockchain1);	
@@ -97,7 +97,7 @@ public class SynchronizationSimulator implements Runnable {
                 BlockchainIO.saveBlockchain(String.format("blockchain%d.json", nodeId1), blockchain2);	
                 System.out.printf("%s updated their pending transactions based on %s's%n", node1.getUsername(), node2.getUsername());	
             }
-    }
+    }*/
     }
 
     
