@@ -88,7 +88,7 @@ public class Blockchain {
     public Block getLatestBlock() {
         return chain.get(chain.size() - 1);
     }
-
+    
     public List<Block> getChain() {
         return chain;
     }
