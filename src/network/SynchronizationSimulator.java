@@ -6,6 +6,7 @@ import core.*;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
 import java.lang.reflect.Type;
 import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
@@ -32,7 +33,7 @@ public class SynchronizationSimulator implements Runnable {
                 if (nodeId1 != nodeId2) {
                     try {
                         compareNodes(nodeId1, nodeId2);
-                    } catch (InvalidKeyException | NoSuchAlgorithmException | SignatureException | InvalidKeySpecException ex) {
+                    } catch (InvalidKeyException | NoSuchAlgorithmException | SignatureException | InvalidKeySpecException | UnsupportedEncodingException ex) {
                         Logger.getLogger(SynchronizationSimulator.class.getName()).log(Level.SEVERE, null, ex);
                     }
                 }
@@ -45,21 +46,20 @@ public class SynchronizationSimulator implements Runnable {
         }
     }
 
-    private void compareNodes(int nodeId1, int nodeId2) throws InvalidKeyException, NoSuchAlgorithmException, SignatureException, InvalidKeySpecException {
-        Blockchain blockchain1 = BlockchainIO.loadBlockchain(String.format("blockchain%d.json", nodeId1));
+    private void compareNodes(int nodeId1, int nodeId2) throws InvalidKeyException, NoSuchAlgorithmException, SignatureException, InvalidKeySpecException, UnsupportedEncodingException {
+        Blockchain blockchain1 = BlockchainIO.loadBlockchain(String.format("blockchain%d.json", 1));
         Blockchain blockchain2 = BlockchainIO.loadBlockchain(String.format("blockchain%d.json", nodeId2));
         int length1 = blockchain1.getLength();
         int length2 = blockchain2.getLength();
         int size1 = blockchain1.getPendingTransactions().size();
         int size2 = blockchain2.getPendingTransactions().size();
 
-        BNode node1 = UsersIO.loadUsers("users.json").get(nodeId1 - 1);
+        BNode node1 = UsersIO.loadUsers("users.json").get(1);
         BNode node2 = UsersIO.loadUsers("users.json").get(nodeId2 - 1);
 
         if (length1 != length2) {
             if (length1 > length2) {
                 Block testBlock = blockchain1.getLatestBlock();
-                //System.out.println("compare if testBlock sig: " + testBlock.getSignature());
                 if (testBlock.verifySignature()) {
                     System.out.println("Signature verification passed");
                     BlockchainIO.saveBlockchain(String.format("blockchain%d.json", nodeId2), blockchain1);
@@ -69,7 +69,6 @@ public class SynchronizationSimulator implements Runnable {
                 }
             } else {
                 Block testBlock = blockchain1.getLatestBlock();
-                //System.out.println("compare else testBlock sig: " + testBlock.getSignature());
                 if (testBlock.verifySignature()) {
                     System.out.println("Signature verification passed");
                     BlockchainIO.saveBlockchain(String.format("blockchain%d.json", nodeId1), blockchain2);
@@ -99,10 +98,8 @@ public class SynchronizationSimulator implements Runnable {
                 BlockchainIO.saveBlockchain(String.format("blockchain%d.json", nodeId1), blockchain2);	
                 System.out.printf("%s updated their pending transactions based on %s's%n", node1.getUsername(), node2.getUsername());	
             }
-        }*/
+    }*/
     }
-
-    
 
     private void verifyNode(BNode node) {
         System.out.printf("Verifying node %d, known as %s%n", node.getId(), node.getUsername());
