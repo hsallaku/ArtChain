@@ -49,6 +49,9 @@ public class Blockchain {
         }
         return true;
     }
+    public void setPendingTransactions(List<Transaction> pendingTransactions) {	
+        this.pendingTransactions = pendingTransactions;	
+    }
 
     public void addTransaction(Transaction transaction) {
         pendingTransactions.add(transaction);
@@ -58,6 +61,7 @@ public class Blockchain {
         // If the blockTransactions list doesn't exist or is full, create a new list
         if (blockTransactions == null || blockTransactions.size() >= 2) {
             blockTransactions = new ArrayList<>();
+            
         }
 
         //add the transaction to the future block's verified transaction queue
@@ -87,10 +91,6 @@ public class Blockchain {
 
     public List<Block> getChain() {
         return chain;
-    }
-    
-    public void setPendingTransactions(List<Transaction> pendingTransactions) {
-        this.pendingTransactions = pendingTransactions;
     }
     
     public List<Transaction> getPendingTransactions(){
