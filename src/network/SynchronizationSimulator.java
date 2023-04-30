@@ -59,6 +59,7 @@ public class SynchronizationSimulator implements Runnable {
         if (length1 != length2) {
             if (length1 > length2) {
                 Block testBlock = blockchain1.getLatestBlock();
+                //System.out.println("compare if testBlock sig: " + testBlock.getSignature());
                 if (testBlock.verifySignature()) {
                     System.out.println("Signature verification passed");
                     BlockchainIO.saveBlockchain(String.format("blockchain%d.json", nodeId2), blockchain1);
@@ -68,6 +69,7 @@ public class SynchronizationSimulator implements Runnable {
                 }
             } else {
                 Block testBlock = blockchain1.getLatestBlock();
+                //System.out.println("compare else testBlock sig: " + testBlock.getSignature());
                 if (testBlock.verifySignature()) {
                     System.out.println("Signature verification passed");
                     BlockchainIO.saveBlockchain(String.format("blockchain%d.json", nodeId1), blockchain2);
@@ -97,7 +99,7 @@ public class SynchronizationSimulator implements Runnable {
                 BlockchainIO.saveBlockchain(String.format("blockchain%d.json", nodeId1), blockchain2);	
                 System.out.printf("%s updated their pending transactions based on %s's%n", node1.getUsername(), node2.getUsername());	
             }
-    }*/
+        }*/
     }
 
     
