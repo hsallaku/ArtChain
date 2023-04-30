@@ -32,27 +32,26 @@ import java.util.logging.Logger;
 import javafx.event.ActionEvent;
 
 public class Main extends Application {
-    
+
     private Stage window;
     private Scene mainMenuScene, newNodeScene, existingNodeScene, transactionSubmissionScene;
     private Pagination pagination;
     private static BNode currentUser = new BNode();
-    private static BNode nextUser = new BNode();
-    
+
     public static void main(String[] args) {
         // Start the synchronization simulator in a separate thread
         SynchronizationSimulator simulator = new SynchronizationSimulator();
         Thread syncThread = new Thread(simulator);
         syncThread.setDaemon(true); // Set the thread as a daemon so it will automatically exit when the main program finishes
         syncThread.start();
-        
+
         launch(args);
     }
 
     @Override
     public void start(Stage primaryStage) {
         window = primaryStage;
-        
+
         mainMenuScene = createMainMenuScene();
         newNodeScene = createNewNodeScene();
         existingNodeScene = createExistingNodeScene();
@@ -92,8 +91,9 @@ public class Main extends Application {
             File usersFile = new File("users.json");
             Gson gson = new Gson();
             List<BNode> users;
-            try (FileReader reader = new FileReader(usersFile)) {
-                Type userListType = new TypeToken<ArrayList<BNode>>(){}.getType();
+            try ( FileReader reader = new FileReader(usersFile)) {
+                Type userListType = new TypeToken<ArrayList<BNode>>() {
+                }.getType();
                 users = gson.fromJson(reader, userListType);
             } catch (IOException ex) {
                 users = new ArrayList<>();
@@ -103,20 +103,18 @@ public class Main extends Application {
             if (!userExists) {
                 try {
                     currentUser = new BNode(username, password);
-                } catch (NoSuchAlgorithmException ex) {
-                    Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
-                } catch (InvalidKeySpecException ex) {
+                } catch (NoSuchAlgorithmException | InvalidKeySpecException ex) {
                     Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
                 }
                 window.setScene(createStandardNodeScene());
-                
+
                 System.out.println("User information saved.");
             } else {
                 showAlert(Alert.AlertType.ERROR, "Error", "Username already exists. Please choose a different username.");
             }
-        
+
         });
-        
+
         Button backBtn = new Button("Back");
         backBtn.setOnAction(e -> window.setScene(mainMenuScene));
 
@@ -142,8 +140,9 @@ public class Main extends Application {
             File usersFile = new File("users.json");
             Gson gson = new Gson();
             List<BNode> users;
-            try (FileReader reader = new FileReader(usersFile)) {
-                Type userListType = new TypeToken<ArrayList<BNode>>(){}.getType();
+            try ( FileReader reader = new FileReader(usersFile)) {
+                Type userListType = new TypeToken<ArrayList<BNode>>() {
+                }.getType();
                 users = gson.fromJson(reader, userListType);
             } catch (IOException ex) {
                 users = new ArrayList<>();
@@ -161,9 +160,7 @@ public class Main extends Application {
                 currentUser = loggedInUser;
                 try {
                     currentUser.restoreKeysFromLoad();
-                } catch (NoSuchAlgorithmException ex) {
-                    Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
-                } catch (InvalidKeySpecException ex) {
+                } catch (NoSuchAlgorithmException | InvalidKeySpecException ex) {
                     Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
                 }
                 System.out.println("Node " + currentUser.getUsername() + " has logged in.");
@@ -192,10 +189,11 @@ public class Main extends Application {
         Label standardNodeWelcome = new Label("Welcome, " + currentUser.getUsername() + "!");
         Button viewBlocksBtnStandardNode = new Button("View Blocks");
         viewBlocksBtnStandardNode.setOnAction(e -> {
-                if(!currentUser.getBlockchain().getChain().isEmpty())
-                    window.setScene(createViewBlocksScene());
-                else
-                    showAlert(Alert.AlertType.INFORMATION, "EMPTY BLOCKCHAIN", "There are no block's in this node's blockchain.");
+            if (!currentUser.getBlockchain().getChain().isEmpty()) {
+                window.setScene(createViewBlocksScene());
+            } else {
+                showAlert(Alert.AlertType.INFORMATION, "EMPTY BLOCKCHAIN", "There are no block's in this node's blockchain.");
+            }
         });
         Button submitTransactionBtnStandardNode = new Button("Submit Transaction");
         submitTransactionBtnStandardNode.setOnAction(e -> window.setScene(transactionSubmissionScene));
@@ -205,7 +203,7 @@ public class Main extends Application {
         VBox standardNodeLayout = new VBox(10);
         standardNodeLayout.getChildren().addAll(standardNodeWelcome, viewBlocksBtnStandardNode, submitTransactionBtnStandardNode, logOutBtnStandardNode);
         standardNodeLayout.setAlignment(Pos.CENTER);
-        
+
         return new Scene(standardNodeLayout, 300, 250);
     }
 
@@ -213,27 +211,29 @@ public class Main extends Application {
         Label validatorNodeWelcome = new Label("Welcome, " + currentUser.getUsername() + "!");
         Button viewBlocksBtnStandardNode = new Button("View Blocks");
         viewBlocksBtnStandardNode.setOnAction(e -> {
-                if(!currentUser.getBlockchain().getChain().isEmpty())
-                    window.setScene(createViewBlocksScene());
-                else
-                    showAlert(Alert.AlertType.INFORMATION, "EMPTY BLOCKCHAIN", "There are no block's in this node's blockchain.");
+            if (!currentUser.getBlockchain().getChain().isEmpty()) {
+                window.setScene(createViewBlocksScene());
+            } else {
+                showAlert(Alert.AlertType.INFORMATION, "EMPTY BLOCKCHAIN", "There are no block's in this node's blockchain.");
+            }
         });
         Button viewPendingTransactionsBtn = new Button("Pending Transactions");
         viewPendingTransactionsBtn.setOnAction(e -> {
-                if(!currentUser.getBlockchain().getPendingTransactions().isEmpty())
-                    window.setScene(createPendingTransactionScene());
-                else
-                    showAlert(Alert.AlertType.INFORMATION, "No remaining pending transactions", "There are no remaining pending transactions.");
+            if (!currentUser.getBlockchain().getPendingTransactions().isEmpty()) {
+                window.setScene(createPendingTransactionScene());
+            } else {
+                showAlert(Alert.AlertType.INFORMATION, "No remaining pending transactions", "There are no remaining pending transactions.");
+            }
         });
         Button submitTransactionBtnValidatorNode = new Button("Submit Transaction");
         submitTransactionBtnValidatorNode.setOnAction(e -> window.setScene(transactionSubmissionScene));
         Button logOutBtnValidatorNode = new Button("Log Out");
         logOutBtnValidatorNode.setOnAction(e -> window.setScene(mainMenuScene));
-        
+
         VBox validatorNodeLayout = new VBox(10);
         validatorNodeLayout.getChildren().addAll(validatorNodeWelcome, viewBlocksBtnStandardNode, viewPendingTransactionsBtn, submitTransactionBtnValidatorNode, logOutBtnValidatorNode);
         validatorNodeLayout.setAlignment(Pos.CENTER);
-        
+
         return new Scene(validatorNodeLayout, 300, 250);
     }
 
@@ -288,7 +288,7 @@ public class Main extends Application {
         StackPane gridWrapper = new StackPane(grid);
         HBox gridHBox = new HBox(gridWrapper);
         gridHBox.setAlignment(Pos.CENTER);
-        
+
         // Definition and functionality for the submit button
         Button submitTransactionFormBtn = new Button("Submit");
         submitTransactionFormBtn.setOnAction(e -> {
@@ -306,7 +306,7 @@ public class Main extends Application {
                 Transaction transaction = new Transaction(artwork, senderName, receiverName, amountValue);
 
                 currentUser.getBlockchain().addTransaction(transaction);
-                
+
                 // Load the current user's blockchain
                 Blockchain currentUserBlockchain = BlockchainIO.loadBlockchain("blockchain" + currentUser.getId() + ".json");
 
@@ -315,7 +315,7 @@ public class Main extends Application {
 
                 // Save the updated blockchain back to the JSON file
                 BlockchainIO.saveBlockchain("blockchain" + currentUser.getId() + ".json", currentUserBlockchain);
-                
+
                 showAlert(Alert.AlertType.INFORMATION, "Success", "Transaction submitted successfully.");
 
                 // Clear the input fields
@@ -327,7 +327,7 @@ public class Main extends Application {
                 amountField.clear();
             }
         });
-        
+
         // Definition and functionality for the back button
         Button backBtnTransactionForm = new Button("Back");
         backBtnTransactionForm.setOnAction(e -> {
@@ -343,7 +343,7 @@ public class Main extends Application {
 
         return new Scene(transactionSubmissionLayout, 300, 300);
     }
-    
+
     private Scene createViewBlocksScene() {
         pagination = new Pagination(currentUser.getBlockchain().getChain().size(), 0);
         pagination.setPageFactory(new Callback<Integer, Node>() {
@@ -383,7 +383,7 @@ public class Main extends Application {
 
         VBox transactionButtonsVBox = new VBox(10);
         transactionButtonsVBox.setAlignment(Pos.CENTER);
-        
+
         for (int i = 0; i < block.getTransactions().size(); i++) {
             Button transactionButton = new Button("Transaction " + (i + 1));
             int transactionIndex = i;
@@ -478,7 +478,7 @@ public class Main extends Application {
 
         return gridHBox;
     }
-    
+
     private Scene createPendingTransactionScene() {
         pagination = new Pagination(currentUser.getBlockchain().getPendingTransactions().size());
         pagination.setPageFactory(new Callback<Integer, Node>() {
@@ -487,13 +487,13 @@ public class Main extends Application {
                 return createPTPage(pageIndex);
             }
         });
-        
+
         // Definition and functionality for the back button
         Button backBtnPendingTransactions = new Button("Back");
         backBtnPendingTransactions.setOnAction(e -> {
             fireBackButton();
         });
-        
+
         HBox buttonsHBox = new HBox(backBtnPendingTransactions);
         buttonsHBox.setAlignment(Pos.CENTER);
         buttonsHBox.setMaxWidth(Double.MAX_VALUE);
@@ -506,16 +506,16 @@ public class Main extends Application {
         Scene scene = new Scene(layout);
         return scene;
     }
-    
+
     public HBox createPTPage(int pageIndex) {
         Transaction transaction = currentUser.getBlockchain().getPendingTransactions().get(pageIndex);
-        
+
         Label artworkTitleLabel = new Label("Artwork Title:");
         artworkTitleLabel.setMaxWidth(Double.MAX_VALUE);
         artworkTitleLabel.setAlignment(Pos.BASELINE_RIGHT);
         TextField artworkTitleField = new TextField(transaction.getArtwork().getTitle());
         artworkTitleField.setEditable(false);
-        
+
         Label artworkArtistLabel = new Label("Artist:");
         artworkArtistLabel.setMaxWidth(Double.MAX_VALUE);
         artworkArtistLabel.setAlignment(Pos.BASELINE_RIGHT);
@@ -566,23 +566,14 @@ public class Main extends Application {
         StackPane gridWrapper = new StackPane(grid);
         HBox gridHBox = new HBox(gridWrapper);
         gridHBox.setAlignment(Pos.CENTER);
-        
+
         Button acceptBtn = new Button("Accept");
         Button rejectBtn = new Button("Reject");
 
         acceptBtn.setOnAction((ActionEvent e) -> {
             try {
                 currentUser.getBlockchain().acceptPendingTransaction(transaction, pageIndex, currentUser.signBlock(), currentUser.getPublicString(), currentUser.getId());
-                /*for (int i = 0; i < getTotalNumberOfNodes(); i++) {
-                    nextUser = 
-                }*/
-            } catch (NoSuchAlgorithmException ex) {
-                Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
-            } catch (InvalidKeyException ex) {
-                Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
-            } catch (SignatureException ex) {
-                Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
-            } catch (UnsupportedEncodingException ex) {
+            } catch (NoSuchAlgorithmException | InvalidKeyException | SignatureException | UnsupportedEncodingException ex) {
                 Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
             }
             updatePTPagination();
@@ -609,7 +600,7 @@ public class Main extends Application {
 
         return new HBox(pageVBox);
     }
-    
+
     public void updatePTPagination() {
         // Save the updated blockchain back to the JSON file
         BlockchainIO.saveBlockchain("blockchain" + currentUser.getId() + ".json", currentUser.getBlockchain());
@@ -619,7 +610,6 @@ public class Main extends Application {
         }
     }
 
-    
     private void showAlert(Alert.AlertType alertType, String title, String message) {
         Alert alert = new Alert(alertType);
         alert.setTitle(title);
@@ -627,33 +617,12 @@ public class Main extends Application {
         alert.setContentText(message);
         alert.showAndWait();
     }
-    
-    private void fireBackButton(){
+
+    private void fireBackButton() {
         if (currentUser.getStatus().equals("s")) {
             window.setScene(createStandardNodeScene());
         } else if (currentUser.getStatus().equals("v")) {
             window.setScene(createValidatorNodeScene());
         }
-    }
-    
-        public int getTotalNumberOfNodes() {
-        File usersFile = new File("users.json");
-        Gson gson = new Gson();
-        List<BNode> users;
-
-        if (usersFile.exists()) {
-            try ( FileReader reader = new FileReader(usersFile)) {
-                Type userListType = new TypeToken<ArrayList<BNode>>() {
-                }.getType();
-                users = gson.fromJson(reader, userListType);
-            } catch (IOException e) {
-                e.printStackTrace();
-                users = new ArrayList<>();
-            }
-        } else {
-            users = new ArrayList<>();
-        }
-
-        return users.size();
     }
 }
