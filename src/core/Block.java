@@ -10,6 +10,7 @@ import java.security.spec.InvalidKeySpecException;
 import java.security.spec.X509EncodedKeySpec;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.Arrays;
 import java.util.Base64;
 import java.util.List;
 import utils.StringUtil;
@@ -29,6 +30,7 @@ public class Block {
         this.transactions = transactions;
         this.hash = calculateHash();
         this.signature = signature;
+        System.out.println(Arrays.toString(getSignature()));
         this.publicString = publicString;
     }
 
@@ -85,11 +87,12 @@ public class Block {
     }
     public boolean verifySignature() throws InvalidKeyException, NoSuchAlgorithmException, SignatureException, InvalidKeySpecException
     {
-    byte[] publicBytes = Base64.getDecoder().decode(publicString);
+    byte[] publicBytes = Base64.getDecoder().decode(getPublicString());
+    byte[] decodedSignature = Base64.getDecoder().decode(getSignatureString());
     PublicKey publicKey = KeyFactory.getInstance("EC").generatePublic(new X509EncodedKeySpec(publicBytes));
     Signature verify = Signature.getInstance("SHA256withECDSA");
     verify.initVerify(publicKey);
-    return verify.verify(signature);
+    return verify.verify(decodedSignature);
     
     }
 
