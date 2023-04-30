@@ -4,6 +4,7 @@
 // CMPT 368 Blockchain & Cryptocurrency Technologies            //	
 // Final Project                                                //	
 //////////////////////////////////////////////////////////////////
+
 package GUI;
 
 import javafx.application.Application;
@@ -573,6 +574,27 @@ public class Main extends Application {
         acceptBtn.setOnAction((ActionEvent e) -> {
             try {
                 currentUser.getBlockchain().acceptPendingTransaction(transaction, pageIndex, currentUser.signBlock(), currentUser.getPublicString(), currentUser.getId());
+                File usersFile = new File("users.json");
+                Gson gson = new Gson();
+                List<BNode> users;
+                try (FileReader reader = new FileReader(usersFile)) {
+                    Type userListType = new TypeToken<ArrayList<BNode>>() {
+                    }.getType();
+                    users = gson.fromJson(reader, userListType);
+                } catch (IOException ex) {
+                    users = new ArrayList<>();
+                }
+                System.out.println("users size: " + users.size());
+                for (BNode user : users) {
+                    if (user.getId() != currentUser.getId()) {
+                        System.out.println("user: " + user.getId());
+                        user.getBlockchain().printPendingTransactions();
+                        System.out.println("user blockchain size before: " + user.getBlockchain().getPendingTransactions().size());
+                        //user.getBlockchain().acceptPendingTransaction(transaction, pageIndex, currentUser.signBlock(), currentUser.getPublicString(), currentUser.getId());
+                        user.getBlockchain().setPendingTransactions(currentUser.getBlockchain().getPendingTransactions());
+                        System.out.println("user blockchain size after: " + user.getBlockchain().getPendingTransactions().size());
+                    }
+                }
             } catch (NoSuchAlgorithmException | InvalidKeyException | SignatureException | UnsupportedEncodingException ex) {
                 Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
             }
