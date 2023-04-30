@@ -38,19 +38,13 @@ public class SynchronizationSimulator implements Runnable {
         Blockchain blockchain2 = BlockchainIO.loadBlockchain(String.format("blockchain%d.json", nodeId2));
         int length1 = blockchain1.getLength();
         int length2 = blockchain2.getLength();
-        List <Transaction> chain1 = new ArrayList<>();
-        chain1 = blockchain1.getPendingTransactions();
         int size1 = blockchain1.getPendingTransactions().size();
-        List <Transaction> chain2 = new ArrayList<>();
-        chain2 = blockchain1.getPendingTransactions();
         int size2 = blockchain2.getPendingTransactions().size();
 
-
-        
         BNode node1 = UsersIO.loadUsers("users.json").get(nodeId1-1);
         BNode node2 = UsersIO.loadUsers("users.json").get(nodeId2-1);
         
-        if (length1 != length2 || chain1 != chain2) {
+        if (length1 != length2) {
             if (length1 > length2) {
                 BlockchainIO.saveBlockchain(String.format("blockchain%d.json", nodeId2), blockchain1);
                 System.out.printf("%s updated their blockchain based on %s's%n", node2.getUsername(), node1.getUsername());
@@ -69,12 +63,15 @@ public class SynchronizationSimulator implements Runnable {
                 verifyNode(node2);
             }
         }
+        
         if (size1 != size2) {
             if (size1 > size2) {
                 blockchain2.setPendingTransactions(blockchain1.getPendingTransactions());
+                BlockchainIO.saveBlockchain(String.format("blockchain%d.json", nodeId2), blockchain1);
                 System.out.printf("%s updated their pending transactions based on %s's%n", node2.getUsername(), node1.getUsername());
             } else {
                 blockchain1.setPendingTransactions(blockchain2.getPendingTransactions());
+                BlockchainIO.saveBlockchain(String.format("blockchain%d.json", nodeId1), blockchain2);
                 System.out.printf("%s updated their pending transactions based on %s's%n", node1.getUsername(), node2.getUsername());
             }
         }
