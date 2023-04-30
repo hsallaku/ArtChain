@@ -75,7 +75,7 @@ public class Blockchain {
             newBlock.setSignatureString();
             addBlock(newBlock, nodeId);
             blockTransactions = null; // Set to null to create a new list for the next block
-            System.out.println("added new block");
+            System.out.println("Added new block");
         }
 
         //remove block from pending transactions list
