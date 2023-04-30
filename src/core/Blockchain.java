@@ -1,107 +1,109 @@
 package core;
 
-import network.*;
+import java.security.InvalidKeyException;
+import java.security.KeyFactory;
+import java.security.NoSuchAlgorithmException;
 import java.security.PublicKey;
-import java.util.*;
+import java.security.Signature;
+import java.security.SignatureException;
+import java.security.spec.InvalidKeySpecException;
+import java.security.spec.X509EncodedKeySpec;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.util.Base64;
+import java.util.List;
+import utils.StringUtil;
 
-public class Blockchain {
-    private List<Block> chain;
-    private List<Transaction> pendingTransactions;
-    private List<Transaction> blockTransactions = new ArrayList<Transaction>();
+public class Block {
+    private String hash;
+    private String previousHash;
+    private String timeStamp;
+    private String publicString;
+    private String signatureString;
+    private transient byte[] signature;
+    private transient byte[] publicKey;
+    private List<Transaction> transactions;
 
-    public Blockchain() {
-        chain = new ArrayList<>();
-        pendingTransactions = new ArrayList<Transaction>();
-        blockTransactions = new ArrayList<Transaction>();
-        chain.add(createGenesisBlock());
+    public Block(String previousHash, List<Transaction> transactions, byte[] signature, String publicString) {
+        this.previousHash = previousHash;
+        this.timeStamp = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
+        this.transactions = transactions;
+        this.hash = calculateHash();
+        this.signature = signature;
+        this.publicString = publicString;
     }
 
-    private Block createGenesisBlock() {
-        List<Transaction> emptyTransactions = new ArrayList<Transaction>();
-        Block genBlock = new Block("0", emptyTransactions, null, null);
-        genBlock.setGenBlockHash();
-        return genBlock;
+
+    public String calculateHash() {
+        return StringUtil.applySha256(
+                previousHash +
+                timeStamp +
+                transactions.toString()
+        );
     }
 
-    public void addBlock(Block newBlock, int nodeId) {
-        chain.add(newBlock);
-        BlockchainIO.saveBlockchain("blockchain" + nodeId + ".json", this);
-    }
-    
-    public int getLength() {
-        return chain.size();
-    }
-
-    public boolean isChainValid() {
-        for (int i = 1; i < getLength(); i++) {
-            Block currentBlock = chain.get(i);
-            Block previousBlock = chain.get(i - 1);
-
-            if (!currentBlock.getHash().equals(currentBlock.calculateHash())) {
-                System.out.println("Current hash does not match calculated hash for block " + i);
-                return false;
-            }
-
-            if (!currentBlock.getPreviousHash().equals(previousBlock.getHash())) {
-                System.out.println("Previous hash does not match for block " + i);
-                return false;
-            }
-        }
-        return true;
-    }
-    public void setPendingTransactions(List<Transaction> pendingTransactions) {	
-        this.pendingTransactions = pendingTransactions;	
-    }
-
-    public void addTransaction(Transaction transaction) {
-        pendingTransactions.add(transaction);
-    }
-
-    public void acceptPendingTransaction(Transaction transaction, int index, byte[] signature, String publicString , int nodeId) {
-        // If the blockTransactions list doesn't exist or is full, create a new list
-        if (blockTransactions == null || blockTransactions.size() >= 2) {
-            blockTransactions = new ArrayList<>();
-            
-        }
-
-        //add the transaction to the future block's verified transaction queue
-        blockTransactions.add(transaction);
-
-        //when max transaction capacity is reached, create a new block from the queue
-        //and empty the queue
-        if (blockTransactions.size() >= 2) {
-            Block newBlock = new Block(getLatestBlock().getHash(), blockTransactions, signature, publicString);
-            newBlock.setSignatureString();
-            addBlock(newBlock, nodeId);
-            blockTransactions = null; // Set to null to create a new list for the next block
-            System.out.println("added new block");
-        }
-
-        //remove block from pending transactions list
-        pendingTransactions.remove(index);
+    public void mineBlock() {
+        hash = calculateHash();
+        System.out.println("Block mined: " + hash);
     }
     
-    public void rejectPendingTransaction(int index){
-        pendingTransactions.remove(index);     
+    // Set the Hash of genesis Block
+    public void setGenBlockHash(){
+        this.hash = "4427766ec2a0fa4f182b3d5c88c8b9d6730ce0e54d5e5d09bc7d2b7bf01b7df3";
+    }
+    public void setSignatureString()
+    {
+        signatureString = Base64.getEncoder().encodeToString(signature);
+    }
+    public String getSignatureString()
+    {
+        return signatureString;
     }
 
-    public Block getLatestBlock() {
-        return chain.get(chain.size() - 1);
+    // Getters and setters
+    public String getHash() {
+        return hash;
+    }
+
+    public String getPreviousHash() {
+        return previousHash;
+    }
+
+    public String getTimeStamp() {
+        return timeStamp;
+    }
+
+    public List<Transaction> getTransactions() {
+        return transactions;
+    }
+    public byte[] getSignature()
+    {
+        return signature;
+    }
+    public String getPublicString()
+    {
+        return publicString;
+    }
+    public boolean verifySignature() throws InvalidKeyException, NoSuchAlgorithmException, SignatureException, InvalidKeySpecException {
+        byte[] publicBytes = Base64.getDecoder().decode(getPublicString());
+        byte[] decodedSignature = Base64.getDecoder().decode(getSignatureString());
+        PublicKey publicKey = KeyFactory.getInstance("EC").generatePublic(new X509EncodedKeySpec(publicBytes));
+        //System.out.println("public key: " + publicKey);
+        //System.out.println("public key str: " + getPublicString());
+        //System.out.println("public key bytes: " + Arrays.toString(publicBytes));
+        //System.out.println("signature: " + Arrays.toString(decodedSignature));
+        Signature verify = Signature.getInstance("SHA256withECDSA");
+        verify.initVerify(publicKey);
+        return verify.verify(decodedSignature);
     }
     
-    public List<Block> getChain() {
-        return chain;
-    }
-    
-    public List<Transaction> getPendingTransactions(){
-        return pendingTransactions;
-    }
-    
-    public void printPendingTransactions(){
-        System.out.println(Arrays.toString(pendingTransactions.toArray()));
-    }
-    
-    public void printTransactions(int blocknr){
-        System.out.println(Arrays.toString(chain.get(blocknr).getTransactions().toArray()));
+    @Override
+    public String toString() {
+        return "Block{" +
+                "hash='" + hash + '\'' +
+                ", previousHash='" + previousHash + '\'' +
+                ", timeStamp=" + timeStamp +
+                ", transactions=" + transactions +
+                '}';
     }
 }
