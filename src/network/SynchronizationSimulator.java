@@ -58,14 +58,6 @@ public class SynchronizationSimulator implements Runnable {
                 BlockchainIO.saveBlockchain(String.format("blockchain%d.json", nodeId1), blockchain2);
                 System.out.printf("%s updated their blockchain based on %s's%n", node1.getUsername(), node2.getUsername());
             }
-            
-            if (length1 > length2) {
-                BlockchainIO.saveBlockchain(String.format("blockchain%d.json", nodeId2), blockchain1);
-                System.out.printf("%s updated their blockchain based on %s's%n", node2.getUsername(), node1.getUsername());
-            } else {
-                BlockchainIO.saveBlockchain(String.format("blockchain%d.json", nodeId1), blockchain2);
-                System.out.printf("%s updated their blockchain based on %s's%n", node1.getUsername(), node2.getUsername());
-            }
         } else {
             String hash1 = blockchain1.getLatestBlock().getHash();
             String hash2 = blockchain2.getLatestBlock().getHash();
@@ -75,6 +67,15 @@ public class SynchronizationSimulator implements Runnable {
             } else {
                 verifyNode(node1);
                 verifyNode(node2);
+            }
+        }
+        if (size1 != size2) {
+            if (size1 > size2) {
+                blockchain2.setPendingTransactions(blockchain1.getPendingTransactions());
+                System.out.printf("%s updated their pending transactions based on %s's%n", node2.getUsername(), node1.getUsername());
+            } else {
+                blockchain1.setPendingTransactions(blockchain2.getPendingTransactions());
+                System.out.printf("%s updated their pending transactions based on %s's%n", node1.getUsername(), node2.getUsername());
             }
         }
     }
