@@ -11,23 +11,24 @@ import java.util.List;
 import com.google.gson.reflect.TypeToken;
 
 public class UsersIO {
-    
+
     public static void saveUsers(String filePath, List<BNode> users) {
         Gson gson = new GsonBuilder().setPrettyPrinting().create();
         String json = gson.toJson(users);
-        
-        try (BufferedWriter writer = new BufferedWriter(new FileWriter(filePath))) {
+
+        try ( BufferedWriter writer = new BufferedWriter(new FileWriter(filePath))) {
             writer.write(json);
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
-    
+
     public static List<BNode> loadUsers(String filePath) {
         Gson gson = new Gson();
-        
-        try (BufferedReader reader = new BufferedReader(new FileReader(filePath))) {
-            return gson.fromJson(reader, new TypeToken<List<BNode>>(){}.getType());
+
+        try ( BufferedReader reader = new BufferedReader(new FileReader(filePath))) {
+            return gson.fromJson(reader, new TypeToken<List<BNode>>() {
+            }.getType());
         } catch (IOException e) {
             e.printStackTrace();
             return null;
