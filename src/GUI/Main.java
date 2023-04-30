@@ -5,6 +5,7 @@ import javafx.util.Callback;
 import javafx.geometry.Pos;
 import javafx.geometry.Insets;
 import javafx.scene.*;
+import javafx.scene.Node;
 import javafx.scene.layout.*;
 import javafx.scene.control.*;
 import javafx.stage.Stage;
@@ -16,6 +17,13 @@ import java.lang.reflect.Type;
 import utils.*;
 import network.*;
 import core.*;
+import java.security.InvalidKeyException;
+import java.security.NoSuchAlgorithmException;
+import java.security.SignatureException;
+import java.security.spec.InvalidKeySpecException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javafx.event.ActionEvent;
 
 public class Main extends Application {
     
@@ -86,9 +94,16 @@ public class Main extends Application {
 
             boolean userExists = users.stream().anyMatch(user -> user.getUsername().equals(username));
             if (!userExists) {
-                currentUser = new BNode(username, password);
+                try {
+                    currentUser = new BNode(username, password);
+                } catch (NoSuchAlgorithmException ex) {
+                    Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
+                } catch (InvalidKeySpecException ex) {
+                    Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
+                }
                 window.setScene(createStandardNodeScene());
-                System.out.println("Node " + currentUser.getUsername() + " has registered");
+                
+                System.out.println("User information saved.");
             } else {
                 showAlert(Alert.AlertType.ERROR, "Error", "Username already exists. Please choose a different username.");
             }
@@ -137,7 +152,14 @@ public class Main extends Application {
 
             if (loggedInUser != null) {
                 currentUser = loggedInUser;
-                System.out.println("Node " + currentUser.getUsername() + " has logged in");
+                try {
+                    currentUser.restoreKeysFromLoad();
+                } catch (NoSuchAlgorithmException ex) {
+                    Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
+                } catch (InvalidKeySpecException ex) {
+                    Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
+                }
+                System.out.println("Node " + currentUser.getUsername() + " has logged in.");
                 currentUser.setBlockchain(BlockchainIO.loadBlockchain("blockchain" + currentUser.getId() + ".json"));
                 if (loggedInUser.getStatus().equals("s")) {
                     window.setScene(createStandardNodeScene());
@@ -341,7 +363,6 @@ public class Main extends Application {
         return viewBlocksScene;
     }
 
-    
     public VBox createVBPage(int pageIndex) {
         currentUser.setBlockchain(BlockchainIO.loadBlockchain("blockchain" + currentUser.getId() + ".json"));
         Block block = currentUser.getBlockchain().getChain().get(pageIndex);
@@ -542,8 +563,18 @@ public class Main extends Application {
         Button acceptBtn = new Button("Accept");
         Button rejectBtn = new Button("Reject");
 
-        acceptBtn.setOnAction(e -> {
-            currentUser.getBlockchain().acceptPendingTransaction(transaction, pageIndex, currentUser.getId());
+        acceptBtn.setOnAction((ActionEvent e) -> {
+            try {
+                currentUser.getBlockchain().acceptPendingTransaction(transaction, pageIndex, currentUser.signBlock(), currentUser.getPublicKeyString(), currentUser.getId());
+            } catch (NoSuchAlgorithmException ex) {
+                Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
+            } catch (InvalidKeyException ex) {
+                Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
+            } catch (SignatureException ex) {
+                Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
+            } catch (UnsupportedEncodingException ex) {
+                Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
+            }
             updatePTPagination();
             if (currentUser.getBlockchain().getPendingTransactions().isEmpty()) {
                 showAlert(Alert.AlertType.INFORMATION, "No remaining pending transactions", "There are no remaining pending transactions.");
@@ -595,4 +626,3 @@ public class Main extends Application {
         }
     }
 }
-
