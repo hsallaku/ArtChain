@@ -47,14 +47,17 @@ public class SynchronizationSimulator implements Runnable {
     }
 
     private void compareNodes(int nodeId1, int nodeId2) throws InvalidKeyException, NoSuchAlgorithmException, SignatureException, InvalidKeySpecException, UnsupportedEncodingException {
-        Blockchain blockchain1 = BlockchainIO.loadBlockchain(String.format("blockchain%d.json", 1));
+        Blockchain blockchain1 = BlockchainIO.loadBlockchain(String.format("blockchain%d.json", nodeId1));
         Blockchain blockchain2 = BlockchainIO.loadBlockchain(String.format("blockchain%d.json", nodeId2));
         int length1 = blockchain1.getLength();
         int length2 = blockchain2.getLength();
         int size1 = blockchain1.getPendingTransactions().size();
         int size2 = blockchain2.getPendingTransactions().size();
+        
+        cleanPT(blockchain1.getPendingTransactions());
+        cleanPT(blockchain2.getPendingTransactions());
 
-        BNode node1 = UsersIO.loadUsers("users.json").get(1);
+        BNode node1 = UsersIO.loadUsers("users.json").get(nodeId1 - 1);
         BNode node2 = UsersIO.loadUsers("users.json").get(nodeId2 - 1);
 
         if (length1 != length2) {
@@ -88,7 +91,7 @@ public class SynchronizationSimulator implements Runnable {
                 verifyNode(node2);
             }
         }
-        /*if (size1 != size2) {	
+        if (size1 != size2) {	
             if (size1 > size2) {	
                 blockchain2.setPendingTransactions(blockchain1.getPendingTransactions());	
                 BlockchainIO.saveBlockchain(String.format("blockchain%d.json", nodeId2), blockchain1);	
@@ -98,7 +101,7 @@ public class SynchronizationSimulator implements Runnable {
                 BlockchainIO.saveBlockchain(String.format("blockchain%d.json", nodeId1), blockchain2);	
                 System.out.printf("%s updated their pending transactions based on %s's%n", node1.getUsername(), node2.getUsername());	
             }
-    }*/
+        }
     }
 
     private void verifyNode(BNode node) {
@@ -125,6 +128,14 @@ public class SynchronizationSimulator implements Runnable {
         }
 
         return users.size();
+    }
+    
+    public void cleanPT(List<Transaction> pendingTransactions){
+        for(int i = 0; i < pendingTransactions.size(); i++){
+            if(pendingTransactions.get(i).getState().equals("processed")){
+                pendingTransactions.remove(i);
+            }
+        }
     }
 
 }
