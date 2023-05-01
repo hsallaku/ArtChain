@@ -14,7 +14,7 @@ ArtChain requires: JavaFX 18 or later (https://jdk.java.net/javafx20/) and Gson 
 
 The program should be compiled through NetBeans, version 14 or later. 
 
-Create a Java with Ant project in NetBeans (we recommend naming it "ArtChain"). If possible, you can instead make a JavaFX project and skip the "Setting Up JavaFX" step below.
+Create a Java with Ant project in NetBeans (we recommend naming it "ArtChain"). 
 
 ### Setting up Gson
 
@@ -24,9 +24,12 @@ Within the Compile-time Libraries pane, click the + symbol next to Classpath and
 
 ### Setting Up JavaFX
 
-Later versions of NetBeans may not have JavaFX or will bring up a "Failed to automatically set-up a JavaFX Platform" error when attempting to create a JavaFX project. 
+Follow the instructions in [this video](https://youtu.be/6E4IkTuvUCI) to set up JavaFX for NetBeans.
 
-In this case, you will have to manually set up JavaFX for your project. 
+### Compiling
+
+In NetBeans, choose the "Clean and Build Project" option in the Run tab. Afterwards, right click on the main.java file and compile that only. Make sure both Gson and JavaFX are set up and integrated into your project.
+oject. 
 Under the "Tools" tab, click Libraries, and then within that window, choose Add Library. Name it JavaFX, and include all .jar files from the "lib" folder of your downloaded JavaFX version.
 
 Right click on the project in Netbeans, and then clock on Properties.
@@ -42,17 +45,3 @@ JavaFX should now be set up for your project.
 ### Compiling
 
 In NetBeans, choose the "Clean and Build Project" option in the Run tab. Make sure both Gson and JavaFX are set up and integrated into your project.
-
-## Testing
-
-Existing validator node login information:
-
-Username: LouvreMuseum,
-Password: 123
-
-Existing standard node login information:
-
-Username: arafat,
-Password: 123
-
-If you would like to create a new validator node, register as a standard node and close the program. Open the users.json file in the program directory, and change the desired user's status from "s" to "v".
