@@ -6,6 +6,7 @@ public class Transaction {
     private String sender;
     private String receiver;
     private String amount;
+    private String state;
 
     // Constructor
     public Transaction(Artwork artwork, String sender, String receiver, String amount) {
@@ -13,6 +14,7 @@ public class Transaction {
         this.sender = sender;
         this.receiver = receiver;
         this.amount = amount;
+        this.state = "unprocessed";
     }
 
     // Getters and setters
@@ -46,6 +48,14 @@ public class Transaction {
 
     public void setAmount(String amount) {
         this.amount = amount;
+    }
+
+    public String getState() {
+        return state;
+    }
+
+    public void setState(String state) {
+        this.state = state;
     }
 
     @Override
