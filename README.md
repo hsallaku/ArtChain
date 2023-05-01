@@ -29,19 +29,3 @@ Follow the instructions in [this video](https://youtu.be/6E4IkTuvUCI) to set up 
 ### Compiling
 
 In NetBeans, choose the "Clean and Build Project" option in the Run tab. Afterwards, right click on the main.java file and compile that only. Make sure both Gson and JavaFX are set up and integrated into your project.
-oject. 
-Under the "Tools" tab, click Libraries, and then within that window, choose Add Library. Name it JavaFX, and include all .jar files from the "lib" folder of your downloaded JavaFX version.
-
-Right click on the project in Netbeans, and then clock on Properties.
-
-Navigate to "Libraries", and in the Compile tab add the JavaFX library to the Classpath tab. 
-Next, in the Run tab, add this same library to the Modulepath.
-
-Now, navitage to the "Run" area of the project's properties and under VM Options, type the following:
-``--add-modules javafx.controls,javafx.fxml``
-
-JavaFX should now be set up for your project.
-
-### Compiling
-
-In NetBeans, choose the "Clean and Build Project" option in the Run tab. Make sure both Gson and JavaFX are set up and integrated into your project.
