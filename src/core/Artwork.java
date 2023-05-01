@@ -1,9 +1,5 @@
 package core;
 
-/**
- *
- * @author Haki
- */
 public class Artwork {
     private String title;
     private String artist;
