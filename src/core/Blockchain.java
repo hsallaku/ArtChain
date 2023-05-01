@@ -75,14 +75,18 @@ public class Blockchain {
             newBlock.setSignatureString();
             addBlock(newBlock, nodeId);
             blockTransactions = null; // Set to null to create a new list for the next block
-            System.out.println("Added new block");
+            System.out.println("added new block");
         }
+        
+        //update the state of the  transaction
+        pendingTransactions.get(index).setState("processed");
 
         //remove block from pending transactions list
         pendingTransactions.remove(index);
     }
 
     public void rejectPendingTransaction(int index) {
+        pendingTransactions.get(index).setState("processed");
         pendingTransactions.remove(index);
     }
 
