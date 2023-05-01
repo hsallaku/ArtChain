@@ -96,19 +96,23 @@ public class Block {
         byte[] publicBytes = null;
         if (getPublicString() != null) {
             publicBytes = Base64.getDecoder().decode(getPublicString());
-            //System.out.println("Got public Key");
+            System.out.println("Got public Key");
         } else {
             return false;
         }
         byte[] decodedSignature = null;
         if (getSignatureString() != null) {
             decodedSignature = Base64.getDecoder().decode(getSignatureString());
-            //System.out.println("got signature");
+            System.out.println("got signature");
         } else {
             return false;
         }
 
         PublicKey publicKey = KeyFactory.getInstance("EC").generatePublic(new X509EncodedKeySpec(publicBytes));
+        System.out.println("public key: " + publicKey);
+        System.out.println("public key str: " + getPublicString());
+        System.out.println("public key bytes: " + Arrays.toString(publicBytes));
+        System.out.println("signature: " + Arrays.toString(decodedSignature));
         Signature verify = Signature.getInstance("SHA256withECDSA");
         verify.initVerify(publicKey);
         return verify.verify(decodedSignature);
