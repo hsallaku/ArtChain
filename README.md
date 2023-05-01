@@ -28,4 +28,4 @@ Follow the instructions in [this video](https://youtu.be/6E4IkTuvUCI) to set up 
 
 ### Compiling
 
-In NetBeans, choose the "Clean and Build Project" option in the Run tab. Afterwards, right click on the main.java file and compile that only. Make sure both Gson and JavaFX are set up and integrated into your project.
+In NetBeans, choose the "Clean and Build Project" option in the Run tab. Afterwards, right click on the main.java file and click "Run". Make sure both Gson and JavaFX are set up and integrated into your project.
