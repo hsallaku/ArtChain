@@ -30,7 +30,7 @@ Follow the instructions in [this video](https://youtu.be/6E4IkTuvUCI) to set up 
 
 In NetBeans, choose the "Clean and Build Project" option in the Run tab. Afterwards, right click on the main.java file and click "Run". Make sure both Gson and JavaFX are set up and integrated into your project.
 
-### Testing
+## Testing
 
 For testing purposes, you can use the following login information to see the different functionalities of the program.
 
