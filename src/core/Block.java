@@ -109,10 +109,10 @@ public class Block {
         }
 
         PublicKey publicKey = KeyFactory.getInstance("EC").generatePublic(new X509EncodedKeySpec(publicBytes));
-        System.out.println("public key: " + publicKey);
-        System.out.println("public key str: " + getPublicString());
-        System.out.println("public key bytes: " + Arrays.toString(publicBytes));
-        System.out.println("signature: " + Arrays.toString(decodedSignature));
+        //System.out.println("public key: " + publicKey);
+        //System.out.println("public key str: " + getPublicString());
+        //System.out.println("public key bytes: " + Arrays.toString(publicBytes));
+        //System.out.println("signature: " + Arrays.toString(decodedSignature));
         Signature verify = Signature.getInstance("SHA256withECDSA");
         verify.initVerify(publicKey);
         return verify.verify(decodedSignature);
