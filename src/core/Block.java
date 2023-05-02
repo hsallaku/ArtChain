@@ -103,7 +103,7 @@ public class Block {
         byte[] decodedSignature = null;
         if (getSignatureString() != null) {
             decodedSignature = Base64.getDecoder().decode(getSignatureString());
-            System.out.println("got signature");
+            System.out.println("Got signature");
         } else {
             return false;
         }
