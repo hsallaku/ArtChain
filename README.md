@@ -29,3 +29,19 @@ Follow the instructions in [this video](https://youtu.be/6E4IkTuvUCI) to set up 
 ### Compiling
 
 In NetBeans, choose the "Clean and Build Project" option in the Run tab. Afterwards, right click on the main.java file and click "Run". Make sure both Gson and JavaFX are set up and integrated into your project.
+
+### Testing
+
+For testing purposes, you can use the following login information to see the different functionalities of the program.
+
+Validator node:
+
+Username: MetMuseum,
+Password: 123
+
+Standard node:
+
+Username: arafat,
+Password: 123
+
+If you would like to create a new node and make it a validator, register a new account using the GUI, then open users.json and find your account. Under the Status field, change "s" to "v", save, and then re-login to the account.
